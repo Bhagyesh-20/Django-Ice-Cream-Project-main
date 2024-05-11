@@ -34,6 +34,7 @@
                             <span id="div{{ product.name }}">
                                 <button id="{{ product.name }}" type="button" class="btn btn-sm btn-outline-secondary cart">Add To Cart</button>
                             </span>
+                            <h6 class="text-xl-end">${{product.price}}</h6>
                         </div>
                     </div>
                 </div>
@@ -46,6 +47,7 @@
 </div>
 
 {% endblock body %}
+
 {% block js %}
 <script>
     var cart = {};
@@ -60,9 +62,12 @@
         var idstr = this.id.toString();
         console.log(idstr);
         if (cart[idstr] !== undefined) {
-            cart[idstr] = cart[idstr] + 1;
+            cart[idstr][0]++; // Increment quantity directly
         } else {
-            cart[idstr] = 1;
+            var qty = 1;
+            var name = $(this).closest('.card-body').find('h5').text(); // Fetch product name
+            var price = parseFloat($(this).closest('.card-body').find('.text-xl-end').text().substring(1)); // Extract numeric price
+            cart[idstr] = [qty, name, price]; // Store as an array
         }
         console.log(cart);
         localStorage.setItem('cart', JSON.stringify(cart));
@@ -71,7 +76,7 @@
 
     function updateCartCount() {
         var cartCount = Object.keys(cart).reduce(function(sum, key) {
-            return sum + cart[key];
+            return sum + cart[key][0]; // Summing up quantities
         }, 0);
         document.getElementById('cart').innerHTML = cartCount;
     }
