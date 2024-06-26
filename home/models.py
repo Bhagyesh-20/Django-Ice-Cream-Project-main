@@ -30,7 +30,8 @@ class Order(models.Model):
     email = models.CharField(max_length=111)
     address = models.CharField(max_length=111)
     city = models.CharField(max_length=111)
-    amount =  models.FloatField(default=0)
+    amount = models.FloatField(default=0)
+
     def __str__(self):
         return f"Order {self.order_id}"
 
