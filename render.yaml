@@ -1,20 +1,19 @@
 databases:
-  - name: Hellodb
+  - name: hellodb
     plan: free
-    databaseName: Hellodb
-    user: Hello
-
+    databaseName: hello_db
+    user: hello_user
 services:
   - type: web
     plan: free
-    name: Hello
+    name: hello
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "python -m gunicorn Hello.asgi:application -k uvicorn.workers.UvicornWorker"
+    startCommand: "python -m gunicorn hello.asgi:application -k uvicorn.workers.UvicornWorker"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: Hellodb
+          name: hellodb
           property: connectionString
       - key: SECRET_KEY
         generateValue: true
