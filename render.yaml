@@ -1,0 +1,22 @@
+databases:
+  - name: Hellodb
+    plan: free
+    databaseName: Hellodb
+    user: Hello
+
+services:
+  - type: web
+    plan: free
+    name: Hello
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "python -m gunicorn Hello.asgi:application -k uvicorn.workers.UvicornWorker"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: Hellodb
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
